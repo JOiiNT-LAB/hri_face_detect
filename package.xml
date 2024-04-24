@@ -13,6 +13,7 @@
   <buildtool_depend>ament_cmake_python</buildtool_depend>
   <buildtool_depend>python_cmake_module</buildtool_depend>
 
+  <build_depend>pal_module_cmake</build_depend>
   <build_depend>pybind11_vendor</build_depend>
 
   <exec_depend>builtin_interfaces</exec_depend>
