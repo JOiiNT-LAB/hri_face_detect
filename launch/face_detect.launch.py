@@ -13,35 +13,118 @@
 # limitations under the License.
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, EmitEvent, RegisterEventHandler
+from launch.actions import EmitEvent, RegisterEventHandler
 from launch.events import matches_action
-from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import LifecycleNode
 from launch_ros.events.lifecycle import ChangeState
 from launch_ros.event_handlers import OnStateTransition
 from lifecycle_msgs.msg import Transition
 
 
+def get_pal_configuration(pkg, node, ld=None):
+    """
+    Get the configuration for a node from the PAL configuration files.
+
+    :param pkg: The package name
+    :param node: The node name
+    :param ld: The launch description to log messages to. If None, no messages are logged.
+    :return: A dictionary with the parameters, remappings and arguments
+    """
+    import yaml
+    import ament_index_python as aip
+    from pathlib import Path
+    from launch.actions import LogInfo
+
+    import collections.abc
+
+    # code for recursive dictionary update
+    # taken from https://stackoverflow.com/a/3233356
+    def update(d, u):
+        for k, v in u.items():
+            if isinstance(v, collections.abc.Mapping):
+                d[k] = update(d.get(k, {}), v)
+            else:
+                d[k] = v
+        return d
+
+    cfg_srcs_pkgs = aip.get_resources(f"pal_configuration.{pkg}")
+
+    cfg_srcs = {}
+    for pkg, _ in cfg_srcs_pkgs.items():
+        cfg_file, _ = aip.get_resource(f"pal_configuration.{pkg}", pkg)
+        share_path = aip.get_package_share_path(pkg)
+        path = Path(share_path) / cfg_file
+        if path.name in cfg_srcs:
+            if ld:
+                ld.add_action(LogInfo(msg="WARNING: two packages provide the same configuration"
+                                      " {path.name} for {pkg}: {cfg_srcs[path.name]} and"
+                                      " {path}. Skipping {path}"))
+            continue
+        cfg_srcs[path.name] = path
+
+    config = {}
+    for cfg_file in sorted(cfg_srcs.keys()):
+        with open(cfg_srcs[cfg_file], 'r') as f:
+            config = update(config, yaml.load(f, yaml.Loader))
+
+    if not config:
+        return {"parameters": [], "remappings": [], "arguments": []}
+
+    node_fqn = None
+    for k in config.keys():
+        if k.split("/")[-1] == node:
+            node_fqn = k
+            break
+
+    if not node_fqn:
+        if ld:
+            ld.add_action(LogInfo(msg="ERROR: configuration files found, but"
+                                  f" node {node} has no entry!\nI looked into the following"
+                                  " configuration files:"
+                                  f" {[str(p) for k, p in cfg_srcs.items()]}\n"
+                                  " Returning empty parameters/remappings/arguments"))
+        return {"parameters": [], "remappings": [], "arguments": []}
+
+    res = {"parameters": [{k: v} for k, v in config[node_fqn].setdefault("ros__parameters", {})
+                          .items()],
+           "remappings": config[node_fqn].setdefault("remappings", {}).items(),
+           "arguments": config[node_fqn].setdefault("arguments", []),
+           }
+
+    if ld:
+        ld.add_action(
+            LogInfo(msg=f"Loaded configuration for <{node}> "
+                    f"from {[str(p) for k, p in cfg_srcs.items()]}"))
+        if res['parameters']:
+            ld.add_action(LogInfo(msg="Parameters: " +
+                                  '\n - '.join([f"{k}: {v}" for d in res['parameters']
+                                                for k, v in d.items()])))
+        if res['remappings']:
+            ld.add_action(LogInfo(msg="Remappings: " +
+                                  '\n - '.join([f"{a} -> {b}" for a, b in res['remappings']])))
+        if res['arguments']:
+            ld.add_action(LogInfo(msg="Arguments: " +
+                                  '\n - '.join(res['arguments'])))
+
+    return res
+
+
 def generate_launch_description():
-    filtering_frame_arg = DeclareLaunchArgument(
-        'filtering_frame', default_value='default_cam',
-        description='The frame where the face pose filtering will take place')
-    rgb_camera_arg = DeclareLaunchArgument(
-        'rgb_camera', default_value='',
-        description='The input camera namespace')
-    rgb_camera_topic_arg = DeclareLaunchArgument(
-        'rgb_camera_topic', default_value=[LaunchConfiguration('rgb_camera'), '/image_raw'],
-        description='The input camera image topic')
-    rgb_camera_info_arg = DeclareLaunchArgument(
-        'rgb_camera_info', default_value=[LaunchConfiguration('rgb_camera'), '/camera_info'],
-        description='The input camera info topic')
+
+    ld = LaunchDescription()
+
+    config = get_pal_configuration(
+        pkg='hri_face_detect', node='face_detect', ld=ld)
 
     face_detect_node = LifecycleNode(
-        package='hri_face_detect', executable='face_detect', namespace='', name='hri_face_detect',
-        parameters=[{'filtering_frame': LaunchConfiguration('filtering_frame')}],
-        remappings=[
-            ('image', LaunchConfiguration('rgb_camera_topic')),
-            ('camera_info', LaunchConfiguration('rgb_camera_info'))])
+        name='hri_face_detect',
+        namespace='',
+        package='hri_face_detect',
+        executable='face_detect',
+        parameters=config["parameters"],
+        remappings=config["remappings"],
+        arguments=config["arguments"],
+    )
 
     configure_event = EmitEvent(event=ChangeState(
         lifecycle_node_matcher=matches_action(face_detect_node),
@@ -53,11 +136,8 @@ def generate_launch_description():
             lifecycle_node_matcher=matches_action(face_detect_node),
             transition_id=Transition.TRANSITION_ACTIVATE))]))
 
-    return LaunchDescription([
-        filtering_frame_arg,
-        rgb_camera_arg,
-        rgb_camera_topic_arg,
-        rgb_camera_info_arg,
-        face_detect_node,
-        configure_event,
-        activate_event])
+    ld.add_action(face_detect_node)
+    ld.add_action(configure_event)
+    ld.add_action(activate_event)
+
+    return ld

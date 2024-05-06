@@ -90,7 +90,7 @@ if(ENABLE_AVX2)
 endif()
 
 if(ENABLE_NEON)
-  message("Using ENON")
+  message("Using NEON")
   set(FDT_COMPILE_DEF ${FDT_COMPILE_DEF} _ENABLE_AVX2)
 endif()
 
@@ -147,9 +147,12 @@ install(TARGETS yunet_detector
   LIBRARY DESTINATION "${PYTHON_INSTALL_DIR}/${PROJECT_NAME}"
 )
 
-install(DIRECTORY launch
+install(DIRECTORY launch config
   DESTINATION share/${PROJECT_NAME}
 )
+
+# register the default configuration file
+ament_index_register_resource("pal_configuration.hri_face_detect" CONTENT config/00-defaults.yml)
 
 if(pal_module_cmake_FOUND)
   pal_register_modules(
