@@ -2,6 +2,16 @@
 Changelog for package hri_face_detect
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* [launch] impl logic to load overlaid parameters
+  This commit:
+  - add (and install) default parameters values in config/00-defaults.yml
+  - rename (unchanged) launch/face_detect.launch.py to launch/face_detect_with_args.launch.py
+  - add a new launch/face_detect.launch.py that implements the PAPS-007 logic
+  to fetch possible parameters, remappings and node arguments via ament_index
+* Contributors: Séverin Lemaignan
+
 2.0.2 (2024-04-24)
 ------------------
 * add pal module
