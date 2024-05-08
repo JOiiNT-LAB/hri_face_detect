@@ -2,8 +2,8 @@
 Changelog for package hri_face_detect
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.3 (2024-05-08)
+------------------
 * [launch] impl logic to load overlaid parameters
   This commit:
   - add (and install) default parameters values in config/00-defaults.yml
