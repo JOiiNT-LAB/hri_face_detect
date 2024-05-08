@@ -32,7 +32,6 @@ def get_pal_configuration(pkg, node, ld=None):
     """
     import yaml
     import ament_index_python as aip
-    from pathlib import Path
     from launch.actions import LogInfo
 
     import collections.abc
@@ -51,16 +50,22 @@ def get_pal_configuration(pkg, node, ld=None):
 
     cfg_srcs = {}
     for pkg, _ in cfg_srcs_pkgs.items():
-        cfg_file, _ = aip.get_resource(f"pal_configuration.{pkg}", pkg)
-        share_path = aip.get_package_share_path(pkg)
-        path = Path(share_path) / cfg_file
-        if path.name in cfg_srcs:
-            if ld:
-                ld.add_action(LogInfo(msg="WARNING: two packages provide the same configuration"
-                                      " {path.name} for {pkg}: {cfg_srcs[path.name]} and"
-                                      " {path}. Skipping {path}"))
-            continue
-        cfg_srcs[path.name] = path
+        cfg_files, _ = aip.get_resource(f"pal_configuration.{pkg}", pkg)
+        for cfg_file in cfg_files.split("\n"):
+            share_path = aip.get_package_share_path(pkg)
+            path = share_path / cfg_file
+            if not path.exists():
+                if ld:
+                    ld.add_action(LogInfo(msg=f"WARNING: configuration file {path} does not exist."
+                                          " Skipping it."))
+                continue
+            if path.name in cfg_srcs:
+                if ld:
+                    ld.add_action(LogInfo(msg="WARNING: two packages provide the same"
+                                          f" configuration {path.name} for {pkg}:"
+                                          f" {cfg_srcs[path.name]} and {path}. Skipping {path}"))
+                continue
+            cfg_srcs[path.name] = path
 
     config = {}
     for cfg_file in sorted(cfg_srcs.keys()):
@@ -90,6 +95,13 @@ def get_pal_configuration(pkg, node, ld=None):
            "remappings": config[node_fqn].setdefault("remappings", {}).items(),
            "arguments": config[node_fqn].setdefault("arguments", []),
            }
+
+    if not isinstance(res["arguments"], list):
+        res["arguments"] = []
+        if ld:
+            ld.add_action(LogInfo(msg="ERROR: 'arguments' field in configuration"
+                                  f" for node {node} must be a _list_ of arguments"
+                                  " to be passed to the node. Ignoring it."))
 
     if ld:
         ld.add_action(
