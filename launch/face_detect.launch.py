@@ -49,10 +49,10 @@ def get_pal_configuration(pkg, node, ld=None):
     cfg_srcs_pkgs = aip.get_resources(f"pal_configuration.{pkg}")
 
     cfg_srcs = {}
-    for pkg, _ in cfg_srcs_pkgs.items():
-        cfg_files, _ = aip.get_resource(f"pal_configuration.{pkg}", pkg)
+    for cfg_srcs_pkg, _ in cfg_srcs_pkgs.items():
+        cfg_files, _ = aip.get_resource(f"pal_configuration.{pkg}", cfg_srcs_pkg)
         for cfg_file in cfg_files.split("\n"):
-            share_path = aip.get_package_share_path(pkg)
+            share_path = aip.get_package_share_path(cfg_srcs_pkg)
             path = share_path / cfg_file
             if not path.exists():
                 if ld:
