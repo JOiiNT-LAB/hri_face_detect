@@ -1,4 +1,4 @@
-/face_detect:
+/hri_face_detect:
   ros__parameters:
     processing_rate: 30 # Best effort frequency for processing input images
     confidence_threshold: 0.75 # the confidence threshold for the face detection

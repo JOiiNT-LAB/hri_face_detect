@@ -123,15 +123,16 @@ def get_pal_configuration(pkg, node, ld=None):
 
 def generate_launch_description():
 
+    pkg = 'hri_face_detect'
+    node = 'hri_face_detect'
     ld = LaunchDescription()
 
-    config = get_pal_configuration(
-        pkg='hri_face_detect', node='face_detect', ld=ld)
+    config = get_pal_configuration(pkg=pkg, node=node, ld=ld)
 
     face_detect_node = LifecycleNode(
-        name='hri_face_detect',
+        name=node,
         namespace='',
-        package='hri_face_detect',
+        package=pkg,
         executable='face_detect',
         parameters=config["parameters"],
         remappings=config["remappings"],
