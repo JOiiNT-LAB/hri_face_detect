@@ -2,6 +2,12 @@
 Changelog for package hri_face_detect
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* fix configuration node name
+* fix get _pal_configuration
+* Contributors: Luka Juricic
+
 2.0.3 (2024-05-08)
 ------------------
 * [launch] impl logic to load overlaid parameters
