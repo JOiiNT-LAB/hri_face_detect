@@ -2,8 +2,8 @@
 Changelog for package hri_face_detect
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.4 (2024-05-23)
+------------------
 * fix configuration node name
 * fix get _pal_configuration
 * Contributors: Luka Juricic
