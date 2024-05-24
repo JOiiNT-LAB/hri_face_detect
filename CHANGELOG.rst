@@ -2,8 +2,8 @@
 Changelog for package hri_face_detect
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.5 (2024-05-24)
+------------------
 * Removed quotes from topic values
 * Contributors: Raquel Ros
 
