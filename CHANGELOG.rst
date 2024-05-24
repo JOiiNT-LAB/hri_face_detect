@@ -2,6 +2,11 @@
 Changelog for package hri_face_detect
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Removed quotes from topic values
+* Contributors: Raquel Ros
+
 2.0.4 (2024-05-23)
 ------------------
 * fix configuration node name
