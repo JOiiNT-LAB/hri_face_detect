@@ -26,6 +26,9 @@ def generate_launch_description():
     filtering_frame_arg = DeclareLaunchArgument(
         'filtering_frame', default_value='default_cam',
         description='The frame where the face pose filtering will take place')
+    deterministic_ids_arg = DeclareLaunchArgument(
+        'deterministic_ids', default_value='false',
+        description='Use monotonically increasing IDs for the detected faces (for testing purposes)')
     rgb_camera_arg = DeclareLaunchArgument(
         'rgb_camera', default_value='',
         description='The input camera namespace')
@@ -38,7 +41,10 @@ def generate_launch_description():
 
     face_detect_node = LifecycleNode(
         package='hri_face_detect', executable='face_detect', namespace='', name='hri_face_detect',
-        parameters=[{'filtering_frame': LaunchConfiguration('filtering_frame')}],
+        parameters=[
+            {'filtering_frame': LaunchConfiguration('filtering_frame'),
+             'deterministic_ids': LaunchConfiguration('deterministic_ids'),
+             }],
         remappings=[
             ('image', LaunchConfiguration('rgb_camera_topic')),
             ('camera_info', LaunchConfiguration('rgb_camera_info'))])
@@ -55,6 +61,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         filtering_frame_arg,
+        deterministic_ids_arg,
         rgb_camera_arg,
         rgb_camera_topic_arg,
         rgb_camera_info_arg,
