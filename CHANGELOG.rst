@@ -2,8 +2,8 @@
 Changelog for package hri_face_detect
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.6 (2024-07-04)
+------------------
 * launch: use get_pal_configuration from launch_pal
 * expose the 'deterministic_ids' in the _with_args launch file
 * Contributors: Séverin Lemaignan
