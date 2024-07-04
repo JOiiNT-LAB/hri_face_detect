@@ -2,6 +2,12 @@
 Changelog for package hri_face_detect
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* launch: use get_pal_configuration from launch_pal
+* expose the 'deterministic_ids' in the _with_args launch file
+* Contributors: Séverin Lemaignan
+
 2.0.5 (2024-05-24)
 ------------------
 * Removed quotes from topic values
