@@ -21,6 +21,7 @@ from launch_ros.event_handlers import OnStateTransition
 from lifecycle_msgs.msg import Transition
 from launch_pal import get_pal_configuration
 
+
 def generate_launch_description():
 
     pkg = 'hri_face_detect'

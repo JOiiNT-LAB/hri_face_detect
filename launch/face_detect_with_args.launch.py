@@ -28,7 +28,8 @@ def generate_launch_description():
         description='The frame where the face pose filtering will take place')
     deterministic_ids_arg = DeclareLaunchArgument(
         'deterministic_ids', default_value='false',
-        description='Use monotonically increasing IDs for the detected faces (for testing purposes)')
+        description='Use monotonically increasing IDs for the detected faces' +
+                    ' (for testing purposes)')
     rgb_camera_arg = DeclareLaunchArgument(
         'rgb_camera', default_value='',
         description='The input camera namespace')
