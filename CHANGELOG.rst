@@ -2,6 +2,11 @@
 Changelog for package hri_face_detect
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* linting
+* Contributors: Séverin Lemaignan
+
 2.0.6 (2024-07-04)
 ------------------
 * launch: use get_pal_configuration from launch_pal
