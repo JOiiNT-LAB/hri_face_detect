@@ -2,6 +2,11 @@
 Changelog for package hri_face_detect
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* rename diagnostics msg to match documentation (and diagnostic_aggregator) categories
+* Contributors: Séverin Lemaignan
+
 2.0.7 (2024-07-04)
 ------------------
 * linting
