@@ -791,7 +791,7 @@ class NodeFaceDetect(Node):
         now = self.get_clock().now()
         arr = DiagnosticArray(header=Header(stamp=now.to_msg()))
         msg = DiagnosticStatus(
-            name='Social perception: Face analysis: Detection', hardware_id='none')
+            name='/social_perception/faces/hri_face_detect', hardware_id='none')
 
         current_proc_duration = (now - self.detection_start_proc_time).nanoseconds / 1e9
         if ((current_proc_duration > FACE_DETECTION_PROC_TIME_ERROR) and self.image_lock.locked()):
@@ -804,7 +804,7 @@ class NodeFaceDetect(Node):
             msg.level = DiagnosticStatus.OK
 
         msg.values = [
-            KeyValue(key='Package name', value='hri_face_detect'),
+            KeyValue(key='Module name', value='hri_face_detect'),
             KeyValue(key='Currently detected faces', value=str(len(self.knownFaces))),
             KeyValue(key='Last detected face ID', value=str(self.last_id)),
             KeyValue(
