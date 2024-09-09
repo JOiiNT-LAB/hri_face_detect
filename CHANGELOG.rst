@@ -2,8 +2,8 @@
 Changelog for package hri_face_detect
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.9 (2024-09-09)
+------------------
 * fixed quality of service camera-related subscribers
 * Contributors: lorenzoferrini
 
