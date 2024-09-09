@@ -2,6 +2,11 @@
 Changelog for package hri_face_detect
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* fixed quality of service camera-related subscribers
+* Contributors: lorenzoferrini
+
 2.0.8 (2024-08-19)
 ------------------
 * rename diagnostics msg to match documentation (and diagnostic_aggregator) categories
