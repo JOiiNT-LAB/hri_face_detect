@@ -35,6 +35,7 @@ from rclpy.duration import Duration
 from rclpy.executors import SingleThreadedExecutor, ExternalShutdownException
 from rclpy.lifecycle import Node, TransitionCallbackReturn
 from rclpy.lifecycle.node import LifecycleState
+from rclpy.qos import qos_profile_sensor_data
 from rclpy.time import Time
 from scipy.optimize import linear_sum_assignment
 from sensor_msgs.msg import Image, CameraInfo
@@ -745,9 +746,10 @@ class NodeFaceDetect(Node):
         self.tf_buffer = Buffer(node=self)
         self.tf_listener = TransformListener(buffer=self.tf_buffer, node=self)
         self.faces_pub = self.create_publisher(IdsList, '/humans/faces/tracked', 1)
-        self.image_sub = self.create_subscription(Image, 'image', self.image_callback, 1)
+        self.image_sub = self.create_subscription(
+            Image, 'image', self.image_callback, qos_profile=qos_profile_sensor_data)
         self.image_info_sub = self.create_subscription(
-            CameraInfo, 'camera_info', self.info_callback, 1)
+            CameraInfo, 'camera_info', self.info_callback, qos_profile=qos_profile_sensor_data)
         self.proc_timer = self.create_timer(
             1/self.get_parameter('processing_rate').value, self.process_image)
 
