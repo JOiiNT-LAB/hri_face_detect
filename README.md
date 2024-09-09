@@ -9,6 +9,14 @@ and image scaling applied) and extracts 5 keypoints.
 The latter works only at close distances and extracts all the ROS4HRI-defined
 landmarks.
 
+## Installing dependencies
+
+If you are running this package outside PAL, first install all the dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
 ## ROS API
 
 ### Parameters
