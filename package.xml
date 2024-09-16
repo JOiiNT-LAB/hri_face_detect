@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package format="2">
+<package format="3">
   <name>hri_face_detect</name>
   <version>2.0.9</version>
   <description>Google Mediapipe-based face detection for ROS4HRI</description>
@@ -13,7 +13,7 @@
   <buildtool_depend>ament_cmake_python</buildtool_depend>
   <buildtool_depend>python_cmake_module</buildtool_depend>
 
-  <build_depend>pal_module_cmake</build_depend>
+  <build_depend condition="$PAL_DISTRO != ''">pal_module_cmake</build_depend>
   <build_depend>pybind11_vendor</build_depend>
 
   <exec_depend>builtin_interfaces</exec_depend>
@@ -23,7 +23,14 @@
   <exec_depend>launch_pal</exec_depend>
   <exec_depend>launch_ros</exec_depend>
   <exec_depend>lifecycle_msgs</exec_depend>
-  <exec_depend>python3-mediapipe</exec_depend>
+
+  <!-- PAL packages mediapipe as a debian. If the package is not available, use the standard ROS
+  rosdep key (that install mediapipe via pip). 
+  -->
+  <exec_depend condition="$PAL_DISTRO != ''">python3-mediapipe</exec_depend>
+  <exec_depend condition="$PAL_DISTRO == ''">python3-mediapipe-pip</exec_depend>
+
+  <exec_depend>cv_bridge</exec_depend>
   <exec_depend>python3-numpy</exec_depend>
   <exec_depend>python3-opencv</exec_depend>
   <exec_depend>python3-pil</exec_depend>
