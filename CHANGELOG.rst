@@ -2,8 +2,8 @@
 Changelog for package hri_face_detect
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.10 (2024-09-16)
+-------------------
 * use python3-mediapipe-pip on non-PAL environments
   While here, add missing dep on cv_bridge
 * Contributors: Séverin Lemaignan
