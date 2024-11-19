@@ -24,20 +24,20 @@ from lifecycle_msgs.msg import Transition
 
 def generate_launch_description():
     filtering_frame_arg = DeclareLaunchArgument(
-        'filtering_frame', default_value='default_cam',
+        'filtering_frame', default_value='',
         description='The frame where the face pose filtering will take place')
     deterministic_ids_arg = DeclareLaunchArgument(
         'deterministic_ids', default_value='false',
         description='Use monotonically increasing IDs for the detected faces' +
                     ' (for testing purposes)')
     rgb_camera_arg = DeclareLaunchArgument(
-        'rgb_camera', default_value='',
+        'rgb_camera', default_value='camera',
         description='The input camera namespace')
     rgb_camera_topic_arg = DeclareLaunchArgument(
-        'rgb_camera_topic', default_value=[LaunchConfiguration('rgb_camera'), '/image_raw'],
+        'rgb_camera_topic', default_value=[LaunchConfiguration('rgb_camera'), '/camera/color/image_raw'],
         description='The input camera image topic')
     rgb_camera_info_arg = DeclareLaunchArgument(
-        'rgb_camera_info', default_value=[LaunchConfiguration('rgb_camera'), '/camera_info'],
+        'rgb_camera_info', default_value=[LaunchConfiguration('rgb_camera'), '/camera/color/camera_info'],
         description='The input camera info topic')
 
     face_detect_node = LifecycleNode(
