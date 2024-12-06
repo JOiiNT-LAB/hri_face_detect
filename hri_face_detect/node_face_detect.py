@@ -270,6 +270,8 @@ class Face:
             # for a 5 char long ID
             self.id = ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=5))
 
+        self.id = "default"
+
         self.initial_detection_time: Time = None
         self.nb_frames_visible = 0
         self.nb_frames_since_last_detection = 0
